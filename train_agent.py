@@ -19,4 +19,13 @@ class DQN(nn.Module):
         x = torch.relu(self.f2(x))
         return self.fc3(x)
 
-        
+    # Hyperparameters
+    EPISODES = 100
+    GAMMA = 0.1
+    LEARNING_RATE = 0.01
+    BATCH_SIZE = 64
+    EPSILON = 1.0 # Initial exploration rate
+    EPSILON_DECAY =0.995
+    EPSILON_MIN =0.01
+    MEMORY_SIZE = 100000
+
