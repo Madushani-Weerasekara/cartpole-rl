@@ -32,3 +32,40 @@ def descrete_state(state):
 
 # 4. Create Q-Table
 q_table = np.zeros(state_bins+[env.action_space.n])  # Shape: (10, 10, 10, 10, 2)
+
+# 5. Train the Agent
+for episode in range(episodes):
+    state, _ = env.reset()
+    state = descrete_state(state)
+    total_reward = 0
+
+    for t in range(200): # Maximum steps per episode
+        # Choose action: Explore or Exploit
+        if np.random.random()<epsilon:
+            action = env.action_space.sample() # Random action (explore)
+        else:
+            action = np.argmax(q_table[state]) # Best action (exploit)
+
+        # Take action and observe result
+        next_state, reward, terminated, truncated, _ = env.step(action)
+        next_state = descrete_state(next_state)
+
+        # Update Q-value using Bellman Equation
+        best_future_q = np.max(q_table[next_state]) # Best Q-value for next state
+        td_target = reward+gamma*best_future_q
+        td_error = td_target-q_table[state+(action,)]
+        q_table[state+(action,)] += alpha*td_error
+
+        # Update state and accumulate reward
+        state = next_state
+        total_reward += reward
+
+        if terminated or truncated:
+            break
+
+        # Decay epsilon
+        epsilon = max(epsilon_min, epsilon*epsilon_decay)
+
+        # Print progress
+        if (episode + 1) % 100 == 0:
+            print(f'Episode: {episode+1}/{episodes}, Total Rewards: {total_reward}, Epsilon: {epsilon:.3f}')
