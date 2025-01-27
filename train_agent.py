@@ -68,4 +68,12 @@ for episode in range(episodes):
 
         # Print progress
         if (episode + 1) % 100 == 0:
-            print(f'Episode: {episode+1}/{episodes}, Total Rewards: {total_reward}, Epsilon: {epsilon:.3f}')
+ 
+           print(f'Episode: {episode+1}/{episodes}, Total Rewards: {total_reward}, Epsilon: {epsilon:.3f}')
+
+# 6. Save Q-Table
+np.save('q_table.npy', q_table)
+
+# 7. Close the environment
+env.close()
+print("Training Completed and Q-Table Saved!")
